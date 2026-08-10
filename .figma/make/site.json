@@ -1,0 +1,10 @@
+{
+  "description": "Showcases company info, marketing pricing, past programs, guest collaborations, and values to attract clients and partners effectively.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
