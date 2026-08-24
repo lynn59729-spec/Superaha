@@ -61,3 +61,73 @@ input, textarea, select, button {
   from { opacity: 0; transform: translateY(16px) scale(0.95); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
+
+.guest-scroll-row {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  padding-bottom: 8px;
+  cursor: grab;
+}
+.guest-scroll-row:active {
+  cursor: grabbing;
+}
+.guest-scroll-row::-webkit-scrollbar {
+  height: 3px;
+}
+.guest-scroll-row::-webkit-scrollbar-track {
+  background: #111;
+}
+.guest-scroll-row::-webkit-scrollbar-thumb {
+  background: rgba(162,255,39,0.3);
+  border-radius: 2px;
+}
+
+@keyframes shimmer-sweep {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── Mobile global tweaks ─────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Marketing steps horizontal scroll */
+  .marketing-steps-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+  .marketing-steps-scroll > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 80vw;
+  }
+
+  /* Values accordion */
+  .values-accordion-item {
+    padding: 20px 0 !important;
+  }
+}
+
+.shimmer-title {
+  background: linear-gradient(
+    105deg,
+    #ffffff 20%,
+    #A2FF27 38%,
+    #e0ffb0 50%,
+    #ffffff 62%,
+    #c0c0c0 80%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-sweep 3.6s linear infinite;
+}

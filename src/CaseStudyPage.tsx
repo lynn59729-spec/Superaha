@@ -79,6 +79,13 @@ export default function CaseStudyPage({ onBack }: Props) {
   const [heroVisible, setHeroVisible] = useState(false)
   const [barVisible, setBarVisible] = useState(false)
   const barRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [])
 
   const stat900 = useCountUp(900, "W+", heroVisible)
   const stat300 = useCountUp(300, "W+", heroVisible)
@@ -109,7 +116,7 @@ export default function CaseStudyPage({ onBack }: Props) {
     section: {
       maxWidth: 1200,
       margin: "0 auto",
-      padding: "80px 40px",
+      padding: isMobile ? "56px 20px" : "80px 40px",
     } as React.CSSProperties,
     label: {
       display: "block",
@@ -139,6 +146,28 @@ export default function CaseStudyPage({ onBack }: Props) {
   return (
     <div style={{ background: DARK, color: "#fff", minHeight: "100vh", fontFamily: "'Outfit', sans-serif" }}>
 
+      {/* Mobile back bar */}
+      {isMobile && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, right: 0, zIndex: 300,
+          background: "rgba(5,5,5,0.92)", backdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(162,255,39,0.15)",
+          padding: "12px 20px",
+          display: "flex", alignItems: "center",
+        }}>
+          <button
+            onClick={onBack}
+            style={{
+              background: "rgba(162,255,39,0.1)", border: `1px solid rgba(162,255,39,0.3)`,
+              borderRadius: 8, color: GREEN, padding: "8px 16px",
+              fontSize: 13, fontWeight: 600, cursor: "pointer",
+            }}
+          >
+            ← 返回官网
+          </button>
+        </div>
+      )}
+
       {/* ── HERO ─────────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
@@ -159,14 +188,15 @@ export default function CaseStudyPage({ onBack }: Props) {
           backgroundSize: "60px 60px, 60px 60px, 100% 100%, 100% 100%",
         }}
       >
-        <div style={{ textAlign: "center", maxWidth: 900, padding: "0 32px", position: "relative", zIndex: 2, paddingTop: 80 }}>
-          {/* Back button */}
+        <div style={{ textAlign: "center", maxWidth: 900, padding: isMobile ? "0 20px" : "0 32px", position: "relative", zIndex: 2, paddingTop: isMobile ? 100 : 80 }}>
+          {/* Back button — desktop only */}
           <button
             onClick={onBack}
             style={{
               position: "absolute",
               top: -116,
               left: 0,
+              display: isMobile ? "none" : undefined,
               background: "rgba(162,255,39,0.1)",
               border: `1px solid rgba(162,255,39,0.3)`,
               borderRadius: 8,
@@ -229,7 +259,7 @@ export default function CaseStudyPage({ onBack }: Props) {
           </p>
 
           {/* Stats */}
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,auto)", gap: 12, justifyContent: "center" }}>
             {STATS.map((s, i) => (
               <div key={i} style={{
                 background: "rgba(255,255,255,0.04)",
@@ -268,7 +298,7 @@ export default function CaseStudyPage({ onBack }: Props) {
 
       {/* ── BRAND BAR ────────────────────────────────────────────────────────── */}
       <section style={{ background: "#fff", color: "#1a1a1a", padding: "40px 0", borderTop: `3px solid ${GREEN}` }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
           <div>
             <div style={{ fontSize: 11, color: "#888", fontWeight: 600, letterSpacing: "0.15em", marginBottom: 6 }}>CASE STUDY / 结案战报</div>
             <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>《不标准女生》第一季</div>
@@ -300,7 +330,7 @@ export default function CaseStudyPage({ onBack }: Props) {
           <span style={S.label}>STRATEGIC BACKGROUND</span>
           <h2 style={S.h2}>战略背景与市场洞察</h2>
           <p style={S.desc}>拒绝陷入低价、同质化的信息流红海内卷，坚持以叙事营销沉淀长效品牌资产。</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 32 }}>
             {[
               {
                 icon: "⚡",
@@ -348,7 +378,7 @@ export default function CaseStudyPage({ onBack }: Props) {
 
       {/* ── FLOW ─────────────────────────────────────────────────────────────── */}
       <section style={{ background: "#0c0c0c", padding: "80px 0" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 40px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: isMobile ? "0 20px" : "0 40px" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <span style={{ ...S.label, display: "block", textAlign: "center" }}>UNSTANDARD MANIFESTO</span>
             <h2 style={{ ...S.h2, textAlign: "center" }}>短带长 · 破圈闭环</h2>
@@ -356,7 +386,7 @@ export default function CaseStudyPage({ onBack }: Props) {
               传统的短视频带货是即时刺激-即时转化；我们的内容全案是情绪触发-搜索聚合-长尾沉淀-品牌认同的闭环链路。
             </p>
           </div>
-          <div style={{ display: "flex", alignItems: "stretch", justifyContent: "center", gap: 0, flexWrap: "wrap" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 12, alignItems: "stretch" }}>
             {FLOW_STEPS.map((s, i) => (
               <React.Fragment key={s.n}>
                 <div style={{
@@ -379,7 +409,7 @@ export default function CaseStudyPage({ onBack }: Props) {
                   <h4 style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>{s.title}</h4>
                   <p style={{ fontSize: 12, color: "#8C8C8C", lineHeight: 1.6 }}>{s.desc}</p>
                 </div>
-                {i < FLOW_STEPS.length - 1 && (
+                {!isMobile && i < FLOW_STEPS.length - 1 && (
                   <div key={`arrow-${i}`} style={{ display: "flex", alignItems: "center", color: GREEN, fontSize: 24, padding: "0 8px" }}>→</div>
                 )}
               </React.Fragment>
@@ -443,7 +473,7 @@ export default function CaseStudyPage({ onBack }: Props) {
           <p style={S.desc}>
             自5月22日首期短视频平台同步启动，围绕核心关联词"妖精的口袋"与品牌态度"不标准女生"进行全网短视频包围。爆款切片的三大工业化内容模型：
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3,1fr)", gap: 24 }}>
             {CLIP_MODELS.map((c, i) => (
               <div key={i} style={{
                 background: "#141414",
@@ -485,7 +515,7 @@ export default function CaseStudyPage({ onBack }: Props) {
           <span style={S.label}>SEO BINDING</span>
           <h2 style={S.h2}>话题绑定品牌 · 触发"大家都在搜"</h2>
           <p style={S.desc}>小红书算法已经将我们的内容打上了品牌标签，搜索"不标准女生"直接关联"妖精的口袋"。</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 24 : 40, alignItems: "center" }}>
             {/* Simulated search */}
             <div style={{ background: "#111", border: `1px solid rgba(162,255,39,0.15)`, borderRadius: 16, padding: 32 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
@@ -565,7 +595,7 @@ export default function CaseStudyPage({ onBack }: Props) {
           <span style={S.label}>OFFICIAL ENDORSEMENT</span>
           <h2 style={S.h2}>腾讯视频官方资源位权威推介</h2>
           <p style={S.desc}>首季播客以优质内容收获官方资源位持续曝光，占领腾讯播客频道页内容高地。</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(4,1fr)", gap: 20 }}>
             {OFFICIAL_CARDS.map((c, i) => (
               <div key={i} style={{
                 background: "#141414",
@@ -639,7 +669,7 @@ export default function CaseStudyPage({ onBack }: Props) {
       </section>
 
       {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
-      <footer style={{ background: "#030303", padding: "40px", borderTop: `1px solid rgba(255,255,255,0.06)` }}>
+      <footer style={{ background: "#030303", padding: isMobile ? "24px 20px" : "40px", borderTop: `1px solid rgba(255,255,255,0.06)` }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 22, height: 22, background: GREEN, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 900, color: DARK }}>S</div>
